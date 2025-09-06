@@ -1,16 +1,20 @@
-# Use a specific version of Postgres for predictability.
-# It's better than using 'latest'. Let's use version 16.
-FROM postgres:latest
+# Use a specific version tag for reproducible builds.
+FROM postgres:16
 
-# Install build dependencies, git, and PostgreSQL development headers
-# The specific dev package must match the postgres version (e.g., postgresql-server-dev-16)
+# Add 'ca-certificates' to the package list
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     git \
     postgresql-server-dev-16 \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone, compile, and install the pgjwt extension
-RUN git clone https://github.com/michelp/pgjwt.git /docker-src/pgjwt \
-    && cd /docker-src/pgjwt \
-    && make install
+# Use WORKDIR to create a directory and set it as the working directory.
+WORKDIR /docker-src
+
+# Now clone the repository into the current directory (/docker-src)
+RUN git clone https://github.com/michelp/pgjwt.git
+
+# Change the working directory into the newly cloned repo and run make install
+WORKDIR /docker-src/pgjwt
+RUN make install
