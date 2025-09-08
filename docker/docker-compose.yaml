@@ -7,10 +7,7 @@ services:
       - 5433:5432
     environment:
       - POSTGRES_PASSWORD=SBaitman123!
-    command:
-      - "postgres"
-      - "-c"
-      - "shared_preload_libraries=pg_cron,pg_graphql"
+    command: postgres -c config_file=/etc/postgresql/local-postgres.conf
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
