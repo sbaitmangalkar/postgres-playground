@@ -17,6 +17,11 @@ RUN wget https://github.com/supabase/pg_graphql/releases/download/v1.5.11/pg_gra
     && dpkg -i pg_graphql.deb \
     && rm pg_graphql.deb
 
+# --- Install pg_mooncake from source ---
+RUN git clone https://github.com/CeresDB/pg_mooncake.git /docker-src/pg_mooncake \
+    && cd /docker-src/pg_mooncake \
+    && cmake . && make && make install
+
 
 WORKDIR /docker-src
 
