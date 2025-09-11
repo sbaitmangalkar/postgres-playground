@@ -4,7 +4,10 @@ FROM postgres:16
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     git \
+    cmake \
+    clang \
     postgresql-server-dev-16 \
+    libssl-dev \
     postgresql-16-cron \
     ca-certificates \
     wget \
@@ -17,8 +20,8 @@ RUN wget https://github.com/supabase/pg_graphql/releases/download/v1.5.11/pg_gra
     && dpkg -i pg_graphql.deb \
     && rm pg_graphql.deb
 
-# --- Install pg_mooncake from source ---
-RUN git clone https://github.com/CeresDB/pg_mooncake.git /docker-src/pg_mooncake \
+# First, build and install pg_mooncake
+RUN git clone https://github.com/Mooncake-Labs/pg_mooncake.git /docker-src/pg_mooncake \
     && cd /docker-src/pg_mooncake \
     && cmake . && make && make install
 
